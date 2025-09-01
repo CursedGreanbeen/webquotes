@@ -3,7 +3,7 @@
 {% block content %}
 <body>
     <h2>Add New Quote</h2>
-    <form method=" " action=" ">
+    <form method="POST" action="">
         {% csrf_token %}
         <p>Quote:<br> <input name="text" /></p>
         <p>Source:<br> <input name="source" /></p>
