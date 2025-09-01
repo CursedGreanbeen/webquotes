@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>{% block title %}Quotes App{% endblock %}</title>
+</head>
+<body>
+    <nav>
+        <a href="{% url 'quotes:index' %}">Home</a>
+        <a href="{% url 'quotes:add_quote' %}">Add Quote</a>
+        <a href="{% url 'quotes:top_quotes' %}">Top Quotes</a>
+    </nav>
+    
+    <div class="content">
+        {% block content %}
+        {% endblock %}
+    </div>
+</body>
+</html>

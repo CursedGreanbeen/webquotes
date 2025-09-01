@@ -1,0 +1,26 @@
+# Django
+*.pyc
+*~
+__pycache__
+db.sqlite3
+migrations/
+
+# Virtual environment
+.venv/
+venv/
+env/
+
+# PyCharm IDE
+.idea/
+*.iml
+*.ipr
+*.iws
+.idea_modules/
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Environment variables
+.env
+.env.local

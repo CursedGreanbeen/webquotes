@@ -1,0 +1,14 @@
+{% extends 'quotes/base.html' %}
+
+{% block content %}
+<body>
+    <h2>Add New Quote</h2>
+    <form method=" " action=" ">
+        {% csrf_token %}
+        <p>Quote:<br> <input name="text" /></p>
+        <p>Source:<br> <input name="source" /></p>
+		<p>Weight:<br> <input name="weight" type="number" /></p>
+        <input type="submit" value="Add" />
+    </form>
+</body>
+{% endblock %}

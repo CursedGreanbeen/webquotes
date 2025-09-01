@@ -1,0 +1,61 @@
+{% extends 'quotes/base.html' %}
+
+{% block content %}
+<h1>Random Quote</h1>
+<div class="quote">
+    <p>"{{ quote.text }}"</p>
+    <p>- From: {{ quote.source.name }}</p>
+
+	<div class="stats">
+		<p>Views: {{ quote.views }}</p>
+		<button class="like-button" data-quote-id="{{ quote.id }}">Like {{ quote.likes }}</button>
+		<span id="likes-{{ quote.id }}">{{ quote.likes }}</span>
+		<button class="dislike-button" data-quote-id="{{ quote.id }}">Dislike {{ quote.dislikes }}</button>
+		<span id="dislikes-{{ quote.id }}">{{ quote.dislikes }}</span>
+    </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script>
+	document.querySelectorAll('.like-button').forEach(button => {
+	button.addEventListener('click', function() {
+		const quoteId = this.getAttribute('data-quote-id');
+		sendVote(quoteId, 'like');
+		});
+	});
+	
+	document.querySelectorAll('.dislike-button').forEach(button => {
+	button.addEventListener('click', function() {
+		const quoteId = this.getAttribute('data-quote-id');
+		sendVote(quoteId, 'dislike');
+		});
+	});
+	
+	function getCsrfToken() {
+		const cookieValue = document.cookie
+			.split('; ')
+			.find(row => row.startsWith('csrftoken='))
+			?.split('=')[1];
+		return cookieValue
+		}
+	
+	function sendVote(quoteId, voteType) {
+		const url = `/quote/${quoteId}/vote/${voteType}/`;
+		fetch(url, {
+			method: 'POST',
+			headers: {
+				'X-CSRFToken': getCsrfToken(),
+				},
+			})
+		.then(response => response.json())
+		.then(data => {
+			const likesCounter = document.querySelector(`#likes-${quoteId}`);
+			likesCounter.textContent = data.likes;
+			const dislikesCounter = document.querySelector(`#dislikes-${quoteId}`);
+			dislikesCounter.textContent = data.dislikes;
+		})
+		.catch(error => console.error('Error: ', error));
+		}
+</script>
+{% endblock %}
