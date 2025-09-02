@@ -1,13 +1,14 @@
 {% extends 'quotes/base.html' %}
 
 {% block content %}
+
 <h1>Top-10 Quotes</h1>
 {% for quote in quotes %}
     <p><strong>Quote:</strong> {{ quote.text }}</p>
     <p><strong>Source:</strong> {{ quote.source.name }}</p>
-    <p><strong>Likes:</strong> <span id="likes-{{ quote.id }}">{{ quote.likes }}</span></p>
-	<p><strong>Dislikes:</strong> <span id="dislikes-{{ quote.id }}">{{ quote.dislikes }}</span></p>
-
+    <p>Likes: <span id="likes-{{ quote.id }}">{{ quote.likes }}</span></p>
+	<p>Dislikes: <span id="dislikes-{{ quote.id }}">{{ quote.dislikes }}</span></p>
+	<p>Views: <span id="views-{{ quote.id }}">{{ quote.views }}</span></p>
 {% endfor %}
 
 {% endblock %}

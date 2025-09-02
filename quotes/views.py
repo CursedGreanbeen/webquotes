@@ -16,6 +16,8 @@ def index(request):
 
     weights = [quote.weight for quote in quotes]
     random_quote = random.choices(quotes, weights=weights, k=1)[0]
+    random_quote.views += 1
+    random_quote.save()
 
     return render(request,
                   'quotes/index.html', context={'random_quote': random_quote})

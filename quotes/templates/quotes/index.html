@@ -53,6 +53,7 @@
 		}
 	
 	function sendVote(quoteId, voteType) {
+		console.log(`Sending ${voteType} for quote ${quoteId}`);
 		const url = `/vote/`;
 		fetch(url, {
 			method: 'POST',
@@ -65,8 +66,13 @@
 				'vote_type': voteType
 			})
 		})
-		.then(response => response.json())
+		.then(response => {
+			console.log('Response status:', response.status);
+			return response.json();
+		})
+		
 		.then(data => {
+			console.log('Response data:', data);
 			const likesCounter = document.querySelector(`#likes-${quoteId}`);
 			likesCounter.textContent = data.likes;
 			const dislikesCounter = document.querySelector(`#dislikes-${quoteId}`);
