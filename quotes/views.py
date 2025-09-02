@@ -1,18 +1,28 @@
-from django.shortcuts import render, get_object_or_404
 from django.http import JsonResponse
 from django.core.exceptions import ValidationError, PermissionDenied
 from django.contrib import messages
-from django.shortcuts import render, redirect
+from django.shortcuts import render, redirect, get_object_or_404
 from .models import Quote, Source
 from .forms import AddQuoteForm
 import random
 
 
 def index(request):
-    quotes = list(Quote.objects.all())
-    random_quote = random.choice(quotes)
-    return render(request,
-                  'quotes/index.html', context={'random': random_quote})
+    quotes_order = Quote.objects.order_by('-weight')
+
+    weight_sum = 0
+    for quote in quotes_order:
+        weight_sum += quote.weight
+
+    random_num = random.randrange(weight_sum)
+
+    for quote in quotes_order:
+        random_num -= quote.weight
+        if random_num <= 0:
+            random_quote = quote
+
+            return render(request,
+                          'quotes/index.html', context={'random': random_quote})
 
 
 def add_quote(request):
@@ -58,7 +68,8 @@ def add_quote(request):
 
 def top_quotes(request):
     top = Quote.objects.order_by('-weight')[:10]
-    return render(request, 'quotes/top_quotes.html', context={'quotes': top})
+    return render(request,
+                  'quotes/top_quotes.html', context={'quotes': top})
 
 
 def vote(request):
@@ -77,4 +88,3 @@ def vote(request):
         return JsonResponse({'likes': quote.likes, 'dislikes': quote.dislikes})
 
     return JsonResponse({'error': 'Invalid request'}, status=400)
-
