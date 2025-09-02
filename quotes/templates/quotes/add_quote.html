@@ -5,9 +5,9 @@
     <h2>Add New Quote</h2>
     <form method="POST" action="">
         {% csrf_token %}
-        <p>Quote:<br> <input name="text" /></p>
-        <p>Source:<br> <input name="source" /></p>
-		<p>Weight:<br> <input name="weight" type="number" /></p>
+        <p>Quote:<br> {{ form.quote_text }}</p>
+        <p>Source:<br> {{ form.quote_source }}</p>
+		<p>Weight:<br> {{ form.quote_weight }}</p>
         <input type="submit" value="Add" />
     </form>
 </body>
