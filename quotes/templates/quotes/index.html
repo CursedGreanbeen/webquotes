@@ -2,16 +2,28 @@
 
 {% block content %}
 <h1>Random Quote</h1>
-<div class="quote">
-    <p>"{{ quote.text }}"</p>
-    <p>- From: {{ quote.source.name }}</p>
+
+{% if random_quote %}
+	<div class="quote">
+		<p>"{{ random_quote.text }}"</p>
+		<p>- Source: {{ random_quote.source.name }}</p>
+	</div>
+{% else %}
+	<p>No quotes to show yet...</p>
+{% endif %}
 
 	<div class="stats">
-		<p>Views: {{ quote.views }}</p>
-		<button class="like-button" data-quote-id="{{ quote.id }}">Like {{ quote.likes }}</button>
-		<span id="likes-{{ quote.id }}">{{ quote.likes }}</span>
-		<button class="dislike-button" data-quote-id="{{ quote.id }}">Dislike {{ quote.dislikes }}</button>
-		<span id="dislikes-{{ quote.id }}">{{ quote.dislikes }}</span>
+		<p>Views: {{ random_quote.views}}</p>
+		<button 
+			class="like-button" data-quote-id="{{ quote.id }}">
+			Like <span id="likes-{{ random_quote.id }}">{{ random_quote.likes }}</span>
+		</button>
+		
+		<button 
+			class="dislike-button" data-quote-id="{{ random_quote.id }}">
+			Dislike <span id="dislikes-{{ random_quote.id }}">{{ random_quote.dislikes }}</span>
+		</button>
+
     </div>
 </div>
 {% endblock %}
@@ -49,7 +61,7 @@
 				'X-CSRFToken': getCsrfToken(),
 			},
 			body: new URLSearchParams({
-				'quote_id': quoteId
+				'quote_id': quoteId,
 				'vote_type': voteType
 			})
 		})
