@@ -8,21 +8,17 @@ import random
 
 
 def index(request):
-    quotes_order = Quote.objects.order_by('-weight')
+    quotes = list(Quote.objects.all())
 
-    weight_sum = 0
-    for quote in quotes_order:
-        weight_sum += quote.weight
+    if not quotes:
+        return render(request,
+                      'quotes/index.html', context={'random': None})
 
-    random_num = random.randrange(weight_sum)
+    weights = [quote.weight for quote in quotes]
+    random_quote = random.choices(quotes, weights=weights, k=1)[0]
 
-    for quote in quotes_order:
-        random_num -= quote.weight
-        if random_num <= 0:
-            random_quote = quote
-
-            return render(request,
-                          'quotes/index.html', context={'random': random_quote})
+    return render(request,
+                  'quotes/index.html', context={'random_quote': random_quote})
 
 
 def add_quote(request):
@@ -49,7 +45,7 @@ def add_quote(request):
                     weight=quote_weight
                 )
                 messages.success(request, 'Quote added successfully!')
-                return redirect('quotes/index.html')
+                return redirect('/')
 
             elif quote_source.quote_set.count() >= 3:
                 add_quote_form.add_error('source', '3 quotes max per each source!')
@@ -61,7 +57,7 @@ def add_quote(request):
                     weight=quote_weight
                 )
                 messages.success(request, 'Quote added successfully!')
-                return redirect('quotes/index.html')
+                return redirect('/')
 
     return render(request, 'quotes/add_quote.html', {'form': add_quote_form})
 
