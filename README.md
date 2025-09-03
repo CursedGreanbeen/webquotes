@@ -23,9 +23,9 @@ Django-приложение для публикации, оценки и слу�
    ```cd webquotes```
 3. Создание и клонирование окружения
    ```python -m venv venv```
-   Для Linux/macOS:
+- Для Linux/macOS:
    ```source venv/bin/activate```
-   Для Windows:
+- Для Windows:
    ```.\venv\Scripts\activate```
 4. Установка зависимостей
    ```pip install -r requirements.txt```
