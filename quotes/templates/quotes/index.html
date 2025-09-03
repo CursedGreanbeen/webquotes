@@ -15,7 +15,7 @@
 	<div class="stats">
 		<p>Views: {{ random_quote.views}}</p>
 		<button 
-			class="like-button" data-quote-id="{{ quote.id }}">
+			class="like-button" data-quote-id="{{ random_quote.id }}">
 			Like <span id="likes-{{ random_quote.id }}">{{ random_quote.likes }}</span>
 		</button>
 		
@@ -30,55 +30,52 @@
 
 {% block scripts %}
 <script>
-	document.querySelectorAll('.like-button').forEach(button => {
-	button.addEventListener('click', function() {
-		const quoteId = this.getAttribute('data-quote-id');
-		sendVote(quoteId, 'like');
-		});
-	});
-	
-	document.querySelectorAll('.dislike-button').forEach(button => {
-	button.addEventListener('click', function() {
-		const quoteId = this.getAttribute('data-quote-id');
-		sendVote(quoteId, 'dislike');
-		});
-	});
-	
-	function getCsrfToken() {
-		const cookieValue = document.cookie
-			.split('; ')
-			.find(row => row.startsWith('csrftoken='))
-			?.split('=')[1];
-		return cookieValue
-		}
-	
-	function sendVote(quoteId, voteType) {
-		console.log(`Sending ${voteType} for quote ${quoteId}`);
-		const url = `/vote/`;
-		fetch(url, {
-			method: 'POST',
-			headers: {
-				'Content-Type': 'application/x-www-form-urlencoded',
-				'X-CSRFToken': getCsrfToken(),
-			},
-			body: new URLSearchParams({
-				'quote_id': quoteId,
-				'vote_type': voteType
-			})
-		})
-		.then(response => {
-			console.log('Response status:', response.status);
-			return response.json();
-		})
-		
-		.then(data => {
-			console.log('Response data:', data);
-			const likesCounter = document.querySelector(`#likes-${quoteId}`);
-			likesCounter.textContent = data.likes;
-			const dislikesCounter = document.querySelector(`#dislikes-${quoteId}`);
-			dislikesCounter.textContent = data.dislikes;
-		})
-		.catch(error => console.error('Error: ', error));
-		}
+    document.querySelectorAll('.like-button').forEach(button => {
+        button.addEventListener('click', function() {
+            const quoteId = this.getAttribute('data-quote-id');
+            sendVote(quoteId, 'like');
+        });
+    });
+    
+    document.querySelectorAll('.dislike-button').forEach(button => {
+        button.addEventListener('click', function() {
+            const quoteId = this.getAttribute('data-quote-id');
+            sendVote(quoteId, 'dislike');
+        });
+    });
+    
+    function getCsrfToken() {
+        const cookieValue = document.cookie
+            .split('; ')
+            .find(row => row.startsWith('csrftoken='))
+            ?.split('=')[1];
+        return cookieValue;
+    }
+    
+    function sendVote(quoteId, voteType) {
+        const url = `/vote/`;
+        
+        fetch(url, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/x-www-form-urlencoded',
+                'X-CSRFToken': getCsrfToken(),
+            },
+            body: new URLSearchParams({
+                'quote_id': quoteId,
+                'vote_type': voteType
+            })
+        })
+        .then(response => {
+            return response.json();
+        })
+        .then(data => {
+            const likesCounter = document.querySelector(`#likes-${quoteId}`);
+            likesCounter.textContent = data.likes;
+            const dislikesCounter = document.querySelector(`#dislikes-${quoteId}`);
+            dislikesCounter.textContent = data.dislikes;
+        })
+        .catch(error => console.error('Error: ', error));
+    }		
 </script>
 {% endblock %}
