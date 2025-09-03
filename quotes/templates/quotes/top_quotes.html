@@ -2,13 +2,32 @@
 
 {% block content %}
 
-<h1 style="text-align: center; color: #2d3436;">Top Quotes</h1>
+<h1 style="text-align: center; color: #2C244F;">Top Quotes</h1>
 {% for quote in quotes %}
-    <p><strong>Quote:</strong> {{ quote.text }}</p>
-    <p><strong>Source:</strong> {{ quote.source.name }}</p>
-    <p>Likes: <span id="likes-{{ quote.id }}">{{ quote.likes }}</span></p>
-	<p>Dislikes: <span id="dislikes-{{ quote.id }}">{{ quote.dislikes }}</span></p>
-	<p>Views: <span id="views-{{ quote.id }}">{{ quote.views }}</span></p>
+<div style="background: #EBE9FC; padding: 25px; border-radius: 12px; margin-bottom: 20px; box-shadow: 0 2px 8px rgba(0,0,0,0.1);">
+    
+	<div style="margin-bottom: 20px;">
+        <p style="font-style: italic; font-size: 1.1em; margin: 0; color: #190F66;">"{{ quote.text }}"</p>
+        <p style="margin: 10px 0 0 0; color: #9889B8;">- {{ quote.source.name }}</p>
+    </div>
+	
+   <div style="display: flex; justify-content: space-around; align-items: center; flex-wrap: wrap; gap: 15px;">
+        <div style="display: flex; align-items: center; gap: 8px;">
+            <span style="color: #190F66;">❤️</span>
+            <span style="font-family: 'Cambria', serif;">{{ quote.likes }}</span>
+        </div>
+        
+        <div style="display: flex; align-items: center; gap: 8px;">
+            <span style="color: #190F66;">💔</span>
+            <span style="font-family: 'Cambria', serif;">{{ quote.dislikes }}</span>
+        </div>
+        
+        <div style="display: flex; align-items: center; gap: 8px;">
+            <span style="color: #190F66;">👁️</span>
+            <span style="font-family: 'Cambria', serif;">{{ quote.views }}</span>
+        </div>
+    </div>
+</div>
 {% endfor %}
 
 {% endblock %}

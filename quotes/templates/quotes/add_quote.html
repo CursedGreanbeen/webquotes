@@ -2,13 +2,44 @@
 
 {% block content %}
 <body>
-	<h2 style="text-align: center; color: #2d3436;">Add new quote</h2>
+	<h1 style="text-align: center; color: #2C244F;">Add new quote</h1>
     <form method="POST" action="">
         {% csrf_token %}
-        <p>Quote:<br> {{ form.quote_text }}</p>
-        <p>Source:<br> {{ form.quote_source }}</p>
-		<p>Weight:<br> {{ form.quote_weight }}</p>
-        <input type="submit" value="Add" />
+        
+		<div style="display: flex; align-items: center; margin-bottom: 20px;">
+			<label style="min-width: 60px; font-family: 'Cambria', serif; margin-right: 10px;">
+				Quote:
+			</label>
+			{{ form.quote_text }}
+		</div>
+		
+        <div style="display: flex; align-items: center; margin-bottom: 20px;">
+			<label style="min-width: 60px; font-family: 'Cambria', serif; margin-right: 10px;">
+				Source:
+			</label>
+			{{ form.quote_source }}
+		</div>
+		
+		<div style="display: flex; align-items: center; margin-bottom: 20px;">
+			<label style="min-width: 60px; font-family: 'Cambria', serif; margin-right: 10px;">
+				Weight:
+			</label>
+			{{ form.quote_weight }}
+		</div>
+		
+		<div style="text-align: center;">
+			<input style="background: #9889B8; 
+					color: white; 
+					border: none; 
+					width: 20%; 
+					min-width: 100px; 
+                    border-radius: 6px; 
+                    cursor: pointer; 
+                    font-family: 'Cambria', serif; 
+                    font-size: 16px; 
+                    min-width: 120px;" 
+					type="submit" value="Add Quote" />
+		</div>
     </form>
 </body>
 {% endblock %}
