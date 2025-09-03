@@ -23,9 +23,7 @@
 			class="dislike-button" data-quote-id="{{ random_quote.id }}">
 			Dislike <span id="dislikes-{{ random_quote.id }}">{{ random_quote.dislikes }}</span>
 		</button>
-
     </div>
-</div>
 {% endblock %}
 
 {% block scripts %}
@@ -52,30 +50,46 @@
         return cookieValue;
     }
     
-    function sendVote(quoteId, voteType) {
-        const url = `/vote/`;
-        
-        fetch(url, {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/x-www-form-urlencoded',
-                'X-CSRFToken': getCsrfToken(),
-            },
-            body: new URLSearchParams({
-                'quote_id': quoteId,
-                'vote_type': voteType
-            })
+	function sendVote(quoteId, voteType) {
+    console.log(`Sending ${voteType} for quote ${quoteId}`);
+    const url = `/vote/`;
+    
+    fetch(url, {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/x-www-form-urlencoded',
+            'X-CSRFToken': getCsrfToken(),
+        },
+        body: new URLSearchParams({
+            'quote_id': quoteId,
+            'vote_type': voteType
         })
-        .then(response => {
-            return response.json();
-        })
-        .then(data => {
-            const likesCounter = document.querySelector(`#likes-${quoteId}`);
+    })
+    .then(response => {
+        console.log('Response status:', response.status);
+        if (!response.ok) {
+            throw new Error('Network response was not ok');
+        }
+        return response.json();
+    })
+    .then(data => {
+        console.log('Response data:', data);
+        if (data.error) {
+            alert(data.error);  // Показываем ошибку пользователю
+            return;
+        }
+        // Обновляем счетчики
+        const likesCounter = document.querySelector(`#likes-${quoteId}`);
+        const dislikesCounter = document.querySelector(`#dislikes-${quoteId}`);
+        if (likesCounter && dislikesCounter) {
             likesCounter.textContent = data.likes;
-            const dislikesCounter = document.querySelector(`#dislikes-${quoteId}`);
             dislikesCounter.textContent = data.dislikes;
-        })
-        .catch(error => console.error('Error: ', error));
-    }		
+        }
+    })
+    .catch(error => {
+        console.error('Error:', error);
+        alert('Error voting: ' + error.message);
+    });
+}
 </script>
 {% endblock %}

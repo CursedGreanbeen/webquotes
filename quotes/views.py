@@ -8,6 +8,9 @@ import random
 
 
 def index(request):
+    print("Session key:", request.session.session_key)
+    print("Voted quotes:", request.session.get('voted_quotes', []))
+
     quotes = list(Quote.objects.all())
 
     if not quotes:
@@ -37,7 +40,7 @@ def add_quote(request):
 
             if Quote.objects.filter(text=quote_text).exists():
                 add_quote_form.add_error('quote_text', 'This quote already exists!')
-                return render(request, 'quotes/add_quote.html', {'form': add_quote_form})
+                return render(request, 'quotes/add_quote.html', {'form': AddQuoteForm()})
 
             if not quote_source:
                 quote_source = Source.objects.create(name=normalized_source)
@@ -74,8 +77,12 @@ def vote(request):
     if request.method == 'POST':
         quote_id = request.POST.get('quote_id')
         vote_type = request.POST.get('vote_type')
-
         quote = get_object_or_404(Quote, pk=quote_id)
+        voted_quotes = request.session.get('voted_quotes', [])
+
+        if str(quote_id) in voted_quotes:
+            return JsonResponse({'error': 'You have already voted!',
+                                 'message': 'You have already voted!'})
 
         if vote_type == 'like':
             quote.likes += 1
@@ -83,6 +90,11 @@ def vote(request):
             quote.dislikes += 1
 
         quote.save()
+
+        voted_quotes.append(str(quote_id))
+        request.session['voted_quotes'] = voted_quotes
+        request.session.save()
+
         return JsonResponse({'likes': quote.likes, 'dislikes': quote.dislikes})
 
     return JsonResponse({'error': 'Invalid request'}, status=400)
