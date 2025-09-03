@@ -6,7 +6,9 @@
 {% if random_quote %}
 	<div class="quote-card">
 		<p style="font-size: 1.25em; font-style: italic; margin: 0; color: #190F66;">"{{ random_quote.text }}"</p>
-		<p style="margin: 15px 0 0 0; color: #190F66;">{{ random_quote.author.name }} — {{ random_quote.source.name }}</p>
+		<p style="margin: 15px 0 0 0; color: #190F66;">
+		{% if random_quote.author %}{{ random_quote.author.name }}{% endif %}
+		{% if random_quote.source %} — {{ random_quote.source.name }}{% endif %}</p>
 	</div>
 {% else %}
 	<p>No quotes to show yet...</p>
