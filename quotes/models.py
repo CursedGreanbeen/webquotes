@@ -3,7 +3,15 @@ from django.db import models
 
 class Source(models.Model):
     objects = models.Manager()
-    name = models.CharField(max_length=200, unique=True)
+    name = models.CharField(max_length=250, unique=True)
+
+    def __str__(self):
+        return self.name
+
+
+class Author(models.Model):
+    objects = models.Manager()
+    name = models.CharField(max_length=100, unique=True)
 
     def __str__(self):
         return self.name
@@ -12,10 +20,11 @@ class Source(models.Model):
 class Quote(models.Model):
     objects = models.Manager()
 
-    text = models.TextField(unique=True)  # unique=True для предотвращения дубликатов цитат
-    source = models.ForeignKey(Source, on_delete=models.CASCADE)  # Связь "многие к одному"
-    weight = models.PositiveIntegerField(default=1)  # "Вес" цитаты
-    views = models.IntegerField(default=0)  # Счетчик просмотров
+    text = models.TextField(unique=True)
+    source = models.ForeignKey(Source, on_delete=models.CASCADE)
+    author = models.ForeignKey(Author, on_delete=models.CASCADE, null=True)
+    weight = models.PositiveIntegerField(default=1)
+    views = models.IntegerField(default=0)
     likes = models.PositiveIntegerField(default=0)
     dislikes = models.PositiveIntegerField(default=0)
 

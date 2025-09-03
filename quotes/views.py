@@ -2,15 +2,12 @@ from django.http import JsonResponse
 from django.core.exceptions import ValidationError, PermissionDenied
 from django.contrib import messages
 from django.shortcuts import render, redirect, get_object_or_404
-from .models import Quote, Source
+from .models import Quote, Source, Author
 from .forms import AddQuoteForm
 import random
 
 
 def index(request):
-    print("Session key:", request.session.session_key)
-    print("Voted quotes:", request.session.get('voted_quotes', []))
-
     quotes = list(Quote.objects.all())
 
     if not quotes:
@@ -33,8 +30,10 @@ def add_quote(request):
         add_quote_form = AddQuoteForm(request.POST)
         
         if add_quote_form.is_valid():
-            normalized_source = add_quote_form.cleaned_data['quote_source'].strip().capitalize()
+            normalized_source = add_quote_form.cleaned_data['quote_source'].strip()
             quote_source = Source.objects.filter(name=normalized_source).first()
+            normalized_author = add_quote_form.cleaned_data['quote_author'].strip()
+            quote_author = Author.objects.filter(name=normalized_author).first()
             quote_text = add_quote_form.cleaned_data['quote_text'].strip()
             quote_weight = add_quote_form.cleaned_data['quote_weight']
 
@@ -42,11 +41,15 @@ def add_quote(request):
                 add_quote_form.add_error('quote_text', 'This quote already exists!')
                 return render(request, 'quotes/add_quote.html', {'form': AddQuoteForm()})
 
+            if not quote_author:
+                quote_author = Author.objects.create(name=normalized_author)
+
             if not quote_source:
                 quote_source = Source.objects.create(name=normalized_source)
                 new_quote = Quote.objects.create(
                     text=quote_text,
                     source=quote_source,
+                    author=quote_author,
                     weight=quote_weight
                 )
                 messages.success(request, 'Quote added successfully!')
@@ -59,6 +62,7 @@ def add_quote(request):
                 new_quote = Quote.objects.create(
                     text=quote_text,
                     source=quote_source,
+                    author=quote_author,
                     weight=quote_weight
                 )
                 messages.success(request, 'Quote added successfully!')
