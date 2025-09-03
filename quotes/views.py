@@ -77,7 +77,7 @@ def add_quote(request):
 
 
 def top_quotes(request):
-    top = Quote.objects.order_by('-weight')[:10]
+    top = Quote.objects.order_by('-likes')[:10]
     return render(request,
                   'quotes/top_quotes.html', context={'quotes': top})
 
