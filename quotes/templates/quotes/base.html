@@ -2,6 +2,47 @@
 <html>
 <head>
     <title>{% block title %}Quotes App{% endblock %}</title>
+	<style>
+	
+		body {
+			font-family: 'Cambria';
+			max-width: 777px;
+			margin: 0 auto;
+			padding: 40px;
+			background: #f8f9fa;
+			line-height: 1.1;
+		}
+		
+		nav {
+			text-align: center;
+			margin-bottom: 40px;
+		}
+		
+		nav a {
+			color: #594BB9;
+            text-decoration: none;
+            margin: 0 15px;
+            font-weight: bold;
+		}
+		
+		.content {
+            background: white;
+            padding: 40px;
+            border-radius: 15px;
+            box-shadow: 0 3px 10px rgba(0,0,0,0.1);
+        }
+		
+		.quote-card {
+            background: #EBE9FC;
+            color: #190F66;
+            padding: 30px;
+            border-radius: 12px;
+            margin: 25px 0;
+            text-align: center;
+        }
+		
+	</style>
+	
 </head>
 <body>
     <nav>
@@ -15,10 +56,16 @@
         {% endblock %}
 		
 		{% if messages %}
+		<div style="background: #d4edda; 
+			color: #155724; 
+			padding: 15px; 
+			border-radius: 8px; 
+			margin: 20px 0;">
+			
 		<div class="messages">
 			{% for message in messages %}
 			<div class="alert alert-{{ message.tags }}">
-				{{ message }}
+				<p>{{ message }}</p>
 			</div>
 			{% endfor %}
 		</div>

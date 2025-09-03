@@ -2,7 +2,7 @@
 
 {% block content %}
 <body>
-    <h2>Add New Quote</h2>
+	<h2 style="text-align: center; color: #2d3436;">Add new quote</h2>
     <form method="POST" action="">
         {% csrf_token %}
         <p>Quote:<br> {{ form.quote_text }}</p>
